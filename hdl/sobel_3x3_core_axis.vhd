@@ -19,9 +19,9 @@ entity sobel_3x3_core_axis is
 generic(
   FIFO_DEPTH    : Integer := 2048;
   FIFO_MEM_TYPE : string  := "auto";
-	PIXEL_WIDTH   : Integer := 8;
-	FRAME_WIDTH	  : integer range 0 to 4095 := 1280;
-	FRAME_HEIGHT  : integer range 0 to 2047 := 720
+  PIXEL_WIDTH   : Integer := 8;
+  FRAME_WIDTH	  : integer range 0 to 4095 := 1280;
+  FRAME_HEIGHT  : integer range 0 to 2047 := 720
 );
 port (
 	aclk 		      : in std_logic;
@@ -321,7 +321,7 @@ begin
             -- The data is stored within our module the following way:
             --
             --	  Lower Line  	         Middle Line              Top Line
-            --      		  		            ________                ________ 
+            --                            ________                ________ 
             --                           |	      |              |        |
             --   s_axis_tdata ----+----> | FIFO 0 | -----+-----> | FIFO 1 |------+
             --                    |      |________| 	   |	   	 |________|      |

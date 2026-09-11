@@ -6,17 +6,22 @@ A **3x3 Sobel Edge Detection** HDL IP core featuring an **AXI4-Stream** video in
 
 The sliding 3x3 pixel matrix is formatted as follows:
 
-$$
-P = \begin{bmatrix} P_1 & P_4 & P_7 \\ P_2 & P_5 & P_8 \\ P_3 & P_6 & P_9 \end{bmatrix} 
-$$
+```
+P = | P1  P4  P7 |
+    | P2  P5  P8 |
+    | P3  P6  P9 |
+```
 
 The horizontal ($G_x$) and vertical ($G_y$) gradients are two images which at each point contain the horizontal and vertical derivative approximations respectively. Their computations are as follows:
-$$
-G_x = \begin{bmatrix} -1 & 0 & +1 \\ -2 & 0 & +2 \\ -1 & 0 & +1 \end{bmatrix} * P
-\quad \text{and} \quad
-G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ +1 & +2 & +1 \end{bmatrix} * P
-$$
+```
+Gx = | -1   0  +1 |
+     | -2   0  +2 |  * P
+     | -1   0  +1 |
 
+Gy = | -1  -2  -1 |
+     |  0   0   0 |  * P
+     | +1  +2  +1 |
+```
 ## Gradient Magnitude Approximation
 
 To avoid computationally expensive square root hardware ($\sqrt{G_x^2 + G_y^2}$), the core uses a fixed-point **Alpha Max Linear Approximation**: 
