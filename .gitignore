@@ -1,0 +1,5 @@
+/test/*.log
+/test/*.pb
+/test/*.hex
+/test/*.jou
+/test/*.png
