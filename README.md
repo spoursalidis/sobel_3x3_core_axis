@@ -6,22 +6,32 @@ A **3x3 Sobel Edge Detection** HDL IP core featuring an **AXI4-Stream** video in
 
 The sliding 3x3 pixel matrix is formatted as follows:
 
-```
-P = | P1  P4  P7 |
-    | P2  P5  P8 |
-    | P3  P6  P9 |
-```
+$$
+P = \begin{bmatrix}
+P1 & P4 & P7 \\
+P2 & P5 & P8 \\
+P3 & P6 & P9
+\end{bmatrix}
+$$
 
 The horizontal ($G_x$) and vertical ($G_y$) gradients are two images which at each point contain the horizontal and vertical derivative approximations respectively. Their computations are as follows:
-```
-Gx = | -1   0  +1 |
-     | -2   0  +2 |  * P
-     | -1   0  +1 |
 
-Gy = | -1  -2  -1 |
-     |  0   0   0 |  * P
-     | +1  +2  +1 |
-```
+$$
+Gx = \begin{bmatrix}
+-1 & 0 & +1 \\
+-2 & 0 & +2 \\
+-1 & 0 & +1
+\end{bmatrix} * P
+$$
+
+$$
+Gy = \begin{bmatrix}
+-1 & -2 & -1 \\
+ 0 &  0 &  0 \\
++1 & +2 & +1
+\end{bmatrix} * P
+$$
+
 ## Gradient Magnitude Approximation
 
 To avoid computationally expensive square root hardware ($\sqrt{G_x^2 + G_y^2}$), the core uses a fixed-point **Alpha Max Linear Approximation**: 
@@ -51,6 +61,14 @@ $$|G| \approx \max(|G_x|, |G_y|) + \left(384 \times \min(|G_x|, |G_y|)\right) \g
 | `m_axis_tready` | Input | Downstream Ready for Output |
 | `m_axis_tuser` | Output | Output Start of Frame |
 | `m_axis_tlast` | Output | Output End of Line |
+
+## Operational Modes
+The core includes an `enable` signal that allows runtime switching between processing and bypass modes:
+
+* **Active Mode (`enable = 1`):** The core performs real-time 3x3 Sobel edge detection on the incoming AXI-Stream video.
+* **Bypass Mode (`enable = 0`):** Processing is disabled, and the input video stream is forwarded directly to the output.
+
+*Note: To prevent visual glitches or frame corruption, changes to the `enable` signal are registered and only take effect at the next frame boundary (End of Frame).*
 
 ## Testbench
 To use the testbench as provided, you will need an input frame in hex-file format named ```input_frame.hex```
